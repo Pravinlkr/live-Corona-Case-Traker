@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="myController">
+<head>
+	<title>corona app</title>
+	<!-- stylesheets and script -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+	<style type="text/css">
+		img{
+			height:90px;
+			width: 150px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron text-center py-3">
+			<!-- In image src="" enter url of image you want to dispaly on top of application -->
+			<img src="C:\Users\Pravin\Desktop\mask.png">
+			<h4 class="">Corona Patient Live Update</h4>
+			<p class="pt-3">Teaching the world to be careful is a constructive service worthy of God’s great gift of life to man. Most countries around the world have seen cases of COVID-19 and many are experiencing outbreaks. Authorities in China and some other countries have succeeded in slowing their outbreaks. However, the situation is unpredictable so check regularly for the latest news.</p>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="card bg-warning">
+						<div class="card-body text-white">
+							<h5>Total Confirmed</h5>
+							<p>{{allData.confirmed.value}}</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="card bg-primary">
+						<div class="card-body text-white">
+							<h5>Total Active</h5>
+							<p>{{allData.confirmed.value - (allData.recovered.value + allData.deaths.value)}}</p>
+						</div>
+					</div>
+				</div>				
+				<div class="col-md-3">
+					<div class="card bg-success">
+						<div class="card-body text-white">
+							<h5>Total Recovered</h5>
+							<p>{{allData.recovered.value}}</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="card bg-danger">
+						<div class="card-body text-white">
+							<h5>Total Deaths</h5>
+							<p>{{allData.deaths.value}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- upper row container ends here now we will search country wise -->
+			<input type="text" class="form-control mt-3" placeholder="Enter country name ..." ng-model="c" ng-change="get_Country_data()"/>
+			<div class="container-fluid" ng-if="country_data">
+				<h6 class="mt-3 text-uppercase">{{c}} status</h6>
+				<div class="row mt-3">
+					<div class="col-md-3">
+						<div class="card bg-warning">
+							<div class="card-body text-white">
+								<h5>Total Confirmed</h5>
+								<p>{{country_data.confirmed.value}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card bg-primary">
+							<div class="card-body text-white">
+								<h5>Total Active</h5>
+								<p>{{country_data.confirmed.value - (country_data.recovered.value + country_data.deaths.value)}}</p>
+							</div>
+						</div>
+					</div>				
+					<div class="col-md-3">
+						<div class="card bg-success">
+							<div class="card-body text-white">
+								<h5>Total Recovered</h5>
+								<p>{{country_data.recovered.value}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card bg-danger">
+							<div class="card-body text-white">
+								<h5>Total Deaths</h5>
+								<p>{{country_data.deaths.value}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		//Api url to get live corona cases data
+		const URL = "https://covid.mathdro.id/api";
+		const URL_C = "https://covid.mathdro.id/api/countries";
+
+		var app = angular.module("myApp", ["ngRoute"]);
+		app.controller('myController', function($scope, $http){
+			$http.get(URL)
+			.then(function(response){
+				$scope.allData = response.data;
+			},function(error){
+				console.log(error);
+			});
+
+			//Function to get country wise data
+			$scope.get_Country_data = function(){
+				let country = $scope.c;
+				if(country == ""){
+					$scope.country_data = undefined;
+					return;}
+					$http.get('https://covid.mathdro.id/api/countries/' + country)
+					.then(function(response){
+						console.log(response);
+						$scope.country_data = response.data;
+					},function(error){
+						console.log(error);
+					});
+				}
+				
+			});
+		</script>
+
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	</body>
+	</html>

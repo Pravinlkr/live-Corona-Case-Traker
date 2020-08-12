@@ -6,6 +6,8 @@ api link is https://covid.mathdro.id/api
 Simple angular data binding principle is used in this application to show real time data
 on display.
 
+for live demo of projedt you can visit https://coronacasetrackerwithangularjs.blogspot.com/
+
 This code is free to use and you can build your project or application by embeding and upgrading this code.
 
 If you want to add any suggetion then do tell in comment.
